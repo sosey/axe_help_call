@@ -743,11 +743,11 @@ class DrizzleObject(object):
         """
         # fill header with some keywords;
         # put 'UNKNOWN' if the contamination mode is not known
-        header.update('NUM_DRIZ',self.ncontrib, 'NUMBER OF IMAGES DRIZZLED')
+        header['NUM_DRIZ'] = (self.ncontrib, 'NUMBER OF IMAGES DRIZZLED')
         if self.cont_info != None:
-            header.update('CONTAM',self.cont_info[0].strip(), 'contamination model')
+            header['CONTAM'] = (self.cont_info[0].strip(), 'contamination model')
         else:
-            header.update('CONTAM', 'UNKNOWN', 'contamination model')
+            header['CONTAM'] = ( 'UNKNOWN', 'contamination model')
 
         # go over all contributors
         index = 0
@@ -759,7 +759,7 @@ class DrizzleObject(object):
             comment = 'contributing image #%i' % (index + 1)
 
             # store the image name
-            header.update(kword, one_contrib.rootname, comment)
+            header[kword] = ( one_contrib.rootname, comment)
 
             # enhance the index
             index += 1
@@ -797,17 +797,17 @@ class DrizzleObject(object):
 
             # insert the new items in inverse order all after 'DATe'
             # this way they will appear in correct order at the beginning
-            fits_output[index].header.update('CDELT2', WCS_input['CDSCALE'], '[arcsec/pixel] cross-dispersion scale',after='DATE')
-            fits_output[index].header.update('CRVAL2', 0.0, '[arcsec] reference value',after='DATE')
-            fits_output[index].header.update('CRPIX2', WCS_input['YOFFS'], '[pix] reference pixel',after='DATE')
-            fits_output[index].header.update('CUNIT2', 'arcsec', 'cross-dispersion units',after='DATE')
-            fits_output[index].header.update('CTYPE2', 'CRDIST', 'cross-dispersion distance',after='DATE')
+            fits_output[index].header['CDELT2'] = ( WCS_input['CDSCALE'], '[arcsec/pixel] cross-dispersion scale',after='DATE')
+            fits_output[index].header['CRVAL2'] = ( 0.0, '[arcsec] reference value',after='DATE')
+            fits_output[index].header['CRPIX2'] = ( WCS_input['YOFFS'], '[pix] reference pixel',after='DATE')
+            fits_output[index].header['CUNIT2'] = ( 'arcsec', 'cross-dispersion units',after='DATE')
+            fits_output[index].header['CTYPE2'] =( 'CRDIST', 'cross-dispersion distance',after='DATE')
 
-            fits_output[index].header.update('CDELT1', WCS_input['DLAMBDA'], '[Angstrom/pixel] dispersion',after='DATE')
-            fits_output[index].header.update('CRVAL1', WCS_input['LAMBDA0'], '[Angstrom] reference value',after='DATE')
-            fits_output[index].header.update('CRPIX1', WCS_input['XOFFS'], '[pixel] reference pixel',after='DATE')
-            fits_output[index].header.update('CUNIT1', 'Angstrom', 'dispersion units',after='DATE')
-            fits_output[index].header.update('CTYPE1', 'WAVE', 'grating dispersion function',after='DATE')
+            fits_output[index].header['CDELT1'] = ( WCS_input['DLAMBDA'], '[Angstrom/pixel] dispersion',after='DATE')
+            fits_output[index].header['CRVAL1'] = ( WCS_input['LAMBDA0'], '[Angstrom] reference value',after='DATE')
+            fits_output[index].header['CRPIX1'] = ( WCS_input['XOFFS'], '[pixel] reference pixel',after='DATE')
+            fits_output[index].header['CUNIT1'] = ( 'Angstrom', 'dispersion units',after='DATE')
+            fits_output[index].header['CTYPE1'] = ( 'WAVE', 'grating dispersion function',after='DATE')
 
         # save the modified image/header;
         # and close the fits
@@ -1088,16 +1088,16 @@ class DrizzleObject(object):
                     kword1   = 'NRE%04i' % (index + 1)
                     kval1    = reject_info[header[img_kword]][0]
                     comment1 = 'number of rejected pixels image #%i' % (index + 1)
-                    header.update(kword1, kval1, comment1, after=img_kword)
+                    header[kword1]=( kval1, comment1, after=img_kword)
 
                     # store the fraction data
                     kword2   = 'RFR%04i' % (index + 1)
                     kval2    = '%.2f' % (100.0*reject_info[header[img_kword]][1])
                     comment2 = '[%] fraction of rejected pixels image ' + '#%i' % (index + 1)
-                    header.update(kword2, float(kval2), comment2, after=kword1)
+                    header[kword2]= (float(kval2), comment2, after=kword1)
 
         else:
-            header.update('NUM_DRIZ',len(reject_info), 'NUMBER OF IMAGES DRIZZLED')
+            header['NUM_DRIZ'] = (len(reject_info), 'NUMBER OF IMAGES DRIZZLED')
             all_keys = reject_info.keys()
             index=0
             for one_key in all_keys:
@@ -1108,19 +1108,19 @@ class DrizzleObject(object):
                 comment1 = 'contributing image #%i' % (index + 1)
 
                 # store the image name
-                header.update(kword1, one_key, comment1)
+                header[kword1] = ( one_key, comment1)
 
                 # store the pixel data
                 kword2   = 'NRE%04i' % (index + 1)
                 kval2    = reject_info[one_key][0]
                 comment2 = 'number of rejected pixels image #%i' % (index + 1)
-                header.update(kword2, kval2, comment2)
+                header[kword2] = ( kval2, comment2)
 
                 # store the fraction data
                 kword3   = 'RFR%04i' % (index + 1)
                 kval3    = '%.2f' % (100.0*reject_info[one_key][1])
                 comment3 = '[%] fraction of rejected pixels image ' + '#%i' % (index + 1)
-                header.update(kword3, float(kval3), comment3)
+                header[kword3] = ( float(kval3), comment3)
 
                 # enhance the counter
                 index += 1
@@ -1435,7 +1435,7 @@ class DrizzleObjectContrib(object):
             contrib_fits = pyfits.open(self.ext_names[one_check], 'update')
 
             # write the exposure time
-            contrib_fits[0].header.update('EXPTIME', exptime)
+            contrib_fits[0].header['EXPTIME'] = exptime
 
             # close the fits
             contrib_fits.close()

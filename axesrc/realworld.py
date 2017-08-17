@@ -90,14 +90,14 @@ class RealWorld(object):
         inima = pyfits.open(self.image_name, 'update')
 
         # write the instrument name in the header
-        inima[0].header.update('INSTRUME', self.instrument, 'instrument name')
+        inima[0].header['INSTRUME'] = ( self.instrument, 'instrument name')
 
         # write the exposure time in the header;
         # 'None' is converted to 1.0
         if self.exptime != None:
-            inima[0].header.update('EXPTIME', self.exptime, 'exposure time')
+            inima[0].header['EXPTIME'] = ( self.exptime, 'exposure time')
         else:
-             inima[0].header.update('EXPTIME', 1.0, 'default exposure time')
+             inima[0].header['EXPTIME'] = ( 1.0, 'default exposure time')
 
         # close the image
         inima.close()

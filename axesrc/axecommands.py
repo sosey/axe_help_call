@@ -80,21 +80,21 @@ class DispImator(object):
         axetasks.sex2gol(grism=self.grismname, config=self.configfile, in_sex=self.iolname,
                          use_direct=True, direct=self.dirname, silent=silent)
         print(' Done')
-       
-       
+
+
         # run GOL2AF
         print('Running task "gol2af"  ...', end=' ')
         axetasks.gol2af(grism=self.grismname, config=self.configfile, orient=1,
                         slitless_geom=1, silent=silent)
         print(' Done')
-        
+
         # run PETCONT
         print('Running task "petcont" ...', end=' ')
         sys.stdout.flush()
         axetasks.petcont(grism=self.grismname, config=self.configfile, cont_model=self.cont_model, spec_models=self.model_spectra,
                          object_models=self.model_images, lambda_psf=self.lambda_psf, no_pet=True, silent=silent)
         print(' Done')
-        
+
     def mopup(self):
         """
         Deleting GOL and OAF files
@@ -167,13 +167,13 @@ class DirImator(object):
         axetasks.sex2gol(grism=self.dirname, config=self.configfile, in_sex=self.iolname,
                          use_direct=False, silent=silent)
         print(' Done')
-        
+
         # run GOL2AF
         print('Running task "gol2af"   ...', end=' ')
         sys.stdout.flush()
         axetasks.gol2af(grism=self.dirname, config=self.configfile, silent=silent)
         print(' Done')
-        
+
         # run DIRIMAGE
         print('Running task "dirimage" ...', end=' ')
         sys.stdout.flush()
@@ -302,7 +302,7 @@ class DummyExtractor(object):
         pet_fits = pyfits.open(result_pet, 'update')
 
         # update the PET header
-        pet_fits[0].header.update('CONTAM', 'GEOM', 'dummy flag - no quantitative contamination')
+        pet_fits[0].header['CONTAM'] = ( 'GEOM', 'dummy flag - no quantitative contamination')
 
         # close and out
         pet_fits.close()
@@ -367,7 +367,7 @@ class DummyExtractor(object):
         out_stp    = getOUTPUT(root_name   + '_2.STP.fits')
         result_stp = getOUTSIM(result_root + '_2.STP.fits')
         shutil.move(out_stp, result_stp)
- 
+
         # delete the background subtracted
         # grism image
         os.unlink(getIMAGE(self.dispersed_image))
@@ -396,7 +396,7 @@ class DummyExtractor(object):
         @type silent: boolean
         """
         from . import axetasks
-        
+
         # run SEX2GOL
         print('Running task "sex2gol" ...', end=' ')
         sys.stdout.flush()
@@ -417,7 +417,7 @@ class DummyExtractor(object):
         sys.stdout.flush()
         axetasks.af2pet(grism=self.dispersed_image, config=self.configfile, silent=silent)
         print(' Done')
-        
+
         #-----------------------------------------------
         # set the contamination keyword
         #

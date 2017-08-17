@@ -206,11 +206,8 @@ def get_axebindir():
 
         arch   = all_variables['arch']
         stsdas = all_variables['stsdas']
-        urdirpkg = all_variables['UR_DIR_PKG']
-        fullstsdas = stsdas.replace('UR_DIR_PKG$',urdirpkg)
         # compose the bin directory
-        axebindir = os.path.join(fullstsdas, 'bin'+arch)
-        print(axebindir)
+        axebindir = os.path.join(stsdas, 'bin'+arch)
         #axe   = all_variables['axe']
         #axebindir   = all_variables['axebin']
 

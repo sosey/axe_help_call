@@ -16,8 +16,8 @@ staff supports the European astronomical community in exploiting the research
 opportunities provided by the earth-orbiting Hubble Space Telescope.
 
 H. Bushouse, STScI, 2011-05-10, version 2.0: Major rewrite of some routines to
-remove all calls to IRAF tasks, such as imrename, imcopy, imarith, and 
-imexpression. All such calls have been replaced with equivalent Python and 
+remove all calls to IRAF tasks, such as imrename, imcopy, imarith, and
+imexpression. All such calls have been replaced with equivalent Python and
 PyFITS file utilities and numpy array arithmetic.
 """
 """
@@ -176,7 +176,7 @@ class aXePrepArator(object):
         msk_data = msk_file['SCI'].data
         sci_data[msk_data < -900000] = -1.0e10
 
-        # Flag pixels in the background image based on the grism image DQ 
+        # Flag pixels in the background image based on the grism image DQ
         # and MSK file
         bck_data[dq_data > 0.5] = -1.0e10
         bck_data[msk_data < -900000] = -1.0e10
@@ -216,11 +216,11 @@ class aXePrepArator(object):
         grism_header = grism_img[ext_info['fits_ext']].header
 
         # write some header iformation
-        grism_header.update('SKY_SCAL', float(flt_ave),  'scaling value for the master background')
-        grism_header.update('SKY_MAST', float(mst_ave),  'average value of the master background')
-        grism_header.update('SKY_IMG',  self.master_bck, 'name of the master background image')
-        grism_header.update('F_SKYPIX', frac_pix,        'fraction of pixels used for scaling')
-        grism_header.update('AXEPRBCK', 'Done',          'flag that background subtraction was done')
+        grism_header['SKY_SCAL'] = (float(flt_ave),  'scaling value for the master background')
+        grism_header['SKY_MAST'] = (float(mst_ave),  'average value of the master background')
+        grism_header['SKY_IMG'] = (self.master_bck, 'name of the master background image')
+        grism_header['F_SKYPIX'] = (frac_pix,        'fraction of pixels used for scaling')
+        grism_header['AXEPRBCK'] = ('Done',          'flag that background subtraction was done')
 
         # save the image
         grism_img.close()
@@ -288,17 +288,17 @@ class aXePrepArator(object):
 
             # transfer important keywords
             # to the grism image
-            grism_header.update('SKY_SCAL', float(fits_head['SKY_SCAL']), 'scaling value of background')
-            grism_header.update('F_SKYPIX', float(fits_head['F_SKYPIX']), 'fraction of pixels used for scaling')
+            grism_header['SKY_SCAL'] = (float(fits_head['SKY_SCAL']), 'scaling value of background')
+            grism_header['F_SKYPIX'] = (float(fits_head['F_SKYPIX']), 'fraction of pixels used for scaling')
 
         # close the fits again
         fits_img.close()
 
         # write some keywords
-        grism_header.update('AXEPRBCK', 'Done', 'flag that background subtraction was done')
-        grism_header.update('SKY_IMG', self.master_bck, 'name of the 1st master background image')
+        grism_header['AXEPRBCK'] = ('Done', 'flag that background subtraction was done')
+        grism_header['SKY_IMG'] =  (self.master_bck, 'name of the 1st master background image')
         if self.params['backped'] != None:
-            grism_header.update('SKY_IMG2', self.params['backped'], 'name of the 2nd master background image')
+            grism_header['SKY_IMG2'] = (self.params['backped'], 'name of the 2nd master background image')
 
         # close the image again
         grism_img.close()
@@ -341,7 +341,7 @@ class aXePrepArator(object):
         except aXeError:
             print("There was a problem with the background subtraction, continuing without it")
             return False
-            
+
         # check whether the background image exists
         bckfilename=axeutils.getOUTPUT(axe_names['SGRI'])
         if not os.path.isfile(bckfilename):
@@ -349,7 +349,7 @@ class aXePrepArator(object):
             raise aXeError(err_msg)
 
         # in case of a low  value, dont do the subtraction if less than 10%
-        sky_frac=pyfits.getval(bckfilename, "FRACFIN",ext=0)        
+        sky_frac=pyfits.getval(bckfilename, "FRACFIN",ext=0)
 
         if sky_frac < 0.1:
             #self._check_low_skyfrac(sky_frac)
@@ -373,19 +373,19 @@ class aXePrepArator(object):
 
         # write some information into the
         # grism image header
-        grism_header.update('AXEPRBCK', 'Done', 'flag that background subtraction was done')
-        grism_header.update('SKY_IMG', self.master_bck, 'name of the 1st master background image')
+        grism_header['AXEPRBCK'] = ('Done', 'flag that background subtraction was done')
+        grism_header['SKY_IMG'] =  (self.master_bck, 'name of the 1st master background image')
 
         # write some scaling information into the header
-        grism_header.update('F_SKYPIX', float(fits_head['FRACFIN']), 'fraction of pixels used for scaling')
-        grism_header.update('SKY_CPS', float(fits_head['SCALVAL']),  'scale used for master sky == sky value [cps]')
-        
+        grism_header['F_SKYPIX'] =  (float(fits_head['FRACFIN']), 'fraction of pixels used for scaling')
+        grism_header['SKY_CPS'] = (float(fits_head['SCALVAL']),  'scale used for master sky == sky value [cps]')
+
         # close the grism image
         # and the scaled image
         fits_img.close()
         grism_img.close()
 
-            
+
         return True
 
     def _subtract_background(self, ext_info):
@@ -393,7 +393,7 @@ class aXePrepArator(object):
         Determine and subtract the background
         """
         goodreturn=True
-        
+
         # generate the mask image
         self._make_mask()
 
@@ -560,7 +560,7 @@ class aXePrepArator(object):
             grism_header = grism_img[ext_info['fits_ext']].header
 
             # write a header entry
-            grism_header.update('AXEPRNOR', 'Done',  'flag that exposure time normal. was done')
+            grism_header['AXEPRNOR'] = ('Done',  'flag that exposure time normal. was done')
 
             # extract the value of the constant
             # sky subtracted in multidrizzle
@@ -601,7 +601,7 @@ class aXePrepArator(object):
 
             # write the subtracted background level
             # into a defined descriptor for later use
-            grism_header.update('SKY_CPS', sky_cps,  'sky level in cps')
+            grism_header['SKY_CPS'] = ( sky_cps,  'sky level in cps')
 
             # close the fits image
             grism_img.close()
@@ -662,10 +662,10 @@ class aXePrepArator(object):
         fits_img  = pyfits.open(axeutils.getIMAGE(self.grisim), 'update')
 
         # write the flag into the science extension
-        fits_img[ext_info['fits_ext']].header.update('AXEGAINC', 'Done',        'flag that gain correction was done')
+        fits_img[ext_info['fits_ext']].header['AXEGAINC'] = ( 'Done',        'flag that gain correction was done')
 
         # write the flag into the error extension, assuming it to be next to the science extension
-        fits_img[ext_info['fits_ext']+1].header.update('AXEGAINC', 'Done',        'flag that gain correction was done')
+        fits_img[ext_info['fits_ext']+1].header['AXEGAINC'] = ( 'Done',        'flag that gain correction was done')
 
         # close the image
         fits_img.close()

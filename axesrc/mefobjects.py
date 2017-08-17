@@ -241,8 +241,8 @@ class MEFExtractor(object):
             # manifest in header
             hist_string1 = 'The extension SCIBCK and ERRBCK were used for '
             hist_string2 = 'background and background error'
-            obj_fits['SCI'].header.update('SCIBCK', 'DONE', 'subtraction of background stamp')
-            obj_fits['SCI'].header.update('ERRBCK', 'DONE', 'processing of background stamp error')
+            obj_fits['SCI'].header['SCIBCK'] = ( 'DONE', 'subtraction of background stamp')
+            obj_fits['SCI'].header['ERRBCK'] = ( 'DONE', 'processing of background stamp error')
             obj_fits['SCI'].header.add_history(hist_string1)
             obj_fits['SCI'].header.add_history(hist_string2)
 
@@ -451,7 +451,7 @@ class DummyImage(object):
         imglayer = pyfits.PrimaryHDU()
 
         # write the extension version
-        imglayer.header.update('EXTVER', 1)
+        imglayer.header['EXTVER'] = 1
 
         # add some data
         imglayer.data = numpy.zeros((10,10))

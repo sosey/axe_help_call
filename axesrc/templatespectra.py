@@ -251,13 +251,13 @@ class TemplateSpectrumList(object):
             hdu = spec.tofits()
 
             # fill in some header keywords
-            hdu.header.update('SPECNAME', os.path.basename(spec.specname), 'Name of spectrum')
-            hdu.header.update('EXTNAME', os.path.basename(spec.specname), 'Name of spectrum')
-            hdu.header.update('PASSBAND', self.tpass_flux, 'Total passband for flux scaling')
-            hdu.header.update('PB_PIVOT', '%.2f' % self.piv_wav, 'Pivot wavelength of total passband')
-            hdu.header.update('MAG_AB', spec.mag_info[0], 'AB-magnitude for flux scaling')
-            hdu.header.update('WAV_AB', spec.mag_info[1], 'Wavelength for AB magnitude [nm]')
-            hdu.header.update('Z', spec.z, 'Redshift of spectrum')
+            hdu.header['SPECNAME'] = ( os.path.basename(spec.specname), 'Name of spectrum')
+            hdu.header['EXTNAME'] = ( os.path.basename(spec.specname), 'Name of spectrum')
+            hdu.header['PASSBAND'] = ( self.tpass_flux, 'Total passband for flux scaling')
+            hdu.header['PB_PIVOT'] = ( '%.2f' % self.piv_wav, 'Pivot wavelength of total passband')
+            hdu.header['MAG_AB'] = ( spec.mag_info[0], 'AB-magnitude for flux scaling')
+            hdu.header['WAV_AB'] = ( spec.mag_info[1], 'Wavelength for AB magnitude [nm]')
+            hdu.header['Z'] =(spec.z, 'Redshift of spectrum')
 
             # append the fits created from
             # the spectrum

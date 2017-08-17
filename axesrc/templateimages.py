@@ -177,7 +177,7 @@ class ArtImage(object):
             if HDU.data != None:
 
                 # write the image name to a keyword
-                HDU.header.update('IMANAME', imaname)
+                HDU.header['IMANAME'] =  imaname
 
                 # normalize the data
                 normData = self._norm_data(HDU.data)
