@@ -6,6 +6,6 @@ Clone this repository, then copy everythingin axesrc/  to the directory in your 
 
 If your conda env was called axeiraf27, and it lived in /home/users/anaconda3/env/axeiraf27/:
 
-cp axesrc/*  /Users/users/anaconda3/envs/axeiraf27/iraf_extern/stsdas/pkg/analysis/slitless/axe/axesrc/
+cp axesrc/*  /home/users/anaconda3/envs/axeiraf27/iraf_extern/stsdas/pkg/analysis/slitless/axe/axesrc/
 
 Then startup pyraf and try it out
